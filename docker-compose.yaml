@@ -9,6 +9,8 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
     restart: always
+    networks:
+      - net
 
   dockhand:
     image: fnsys/dockhand:${DOCKHAND_IMAGE_VERSION:-latest}
@@ -23,7 +25,13 @@ services:
     depends_on:
       - postgres
     restart: unless-stopped
+    networks:
+      - net
 
 volumes:
   dbdata:
     name: dockhand-dbdata
+
+networks:
+  net:
+    name: dockhand-network
