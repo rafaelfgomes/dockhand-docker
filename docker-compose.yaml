@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  dockhand:
+    image: fnsys/dockhand:latest
+    ports:
+      - ${DOCKHAND_PORT:-3000}:3000
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB_NAME}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKHAND_DATA_FOLDER:-./data}:/app/data
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
