@@ -10,7 +10,7 @@ services:
       - dbdata:/var/lib/postgresql/data
     restart: always
     networks:
-      - net
+      local:
 
   dockhand:
     image: fnsys/dockhand:${DOCKHAND_IMAGE_VERSION:-latest}
@@ -26,12 +26,17 @@ services:
       - postgres
     restart: unless-stopped
     networks:
-      - net
+      external:
+        ipv4_address: ${DOCKHAND_IP_ADDRESS}
+      local:
 
 volumes:
   dbdata:
     name: dockhand-dbdata
 
 networks:
-  net:
-    name: dockhand-network
+  external:
+    external: true
+    name: ${EXTERNAL_NETWORK_NAME}
+  local:
+    name: dockhand-internal-network
