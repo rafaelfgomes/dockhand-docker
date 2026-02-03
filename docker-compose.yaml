@@ -15,10 +15,10 @@ services:
   dockhand:
     image: fnsys/dockhand:${DOCKHAND_IMAGE_VERSION:-latest}
     container_name: dockhand-app
-    ports:
-      - ${DOCKHAND_PORT:-3000}:3000
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB_NAME}
+      PUID: ${PUID:-1001}
+      PGID: ${PGID:-1001}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${DOCKHAND_DATA_FOLDER:-./data}:/app/data
