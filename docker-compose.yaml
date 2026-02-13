@@ -25,18 +25,12 @@ services:
     depends_on:
       - postgres
     restart: unless-stopped
-    networks:
-      external:
-        ipv4_address: ${DOCKHAND_IP_ADDRESS}
-      local:
+    network_mode: host
 
 volumes:
   dbdata:
     name: dockhand-dbdata
 
 networks:
-  external:
-    external: true
-    name: ${EXTERNAL_NETWORK_NAME}
   local:
     name: dockhand-internal-network
