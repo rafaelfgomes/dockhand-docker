@@ -25,7 +25,10 @@ services:
     depends_on:
       - postgres
     restart: unless-stopped
-    network_mode: host
+    ports:
+      - 3000:3000
+    networks:
+      local:
 
 volumes:
   dbdata:
