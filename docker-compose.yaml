@@ -13,15 +13,13 @@ services:
       local:
 
   dockhand:
-    image: fnsys/dockhand:${DOCKHAND_IMAGE_VERSION:-latest}
+    image: fnsys/dockhand
     container_name: dockhand-app
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB_NAME}
-      PUID: ${PUID:-1001}
-      PGID: ${PGID:-1001}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${DOCKHAND_DATA_FOLDER:-./data}:/app/data
+      - ./data:/app/data
     depends_on:
       - postgres
     restart: unless-stopped
