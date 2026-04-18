@@ -34,4 +34,4 @@ volumes:
 
 networks:
   local:
-    name: dockhand-internal-network
+    name: dockhand-local-network
