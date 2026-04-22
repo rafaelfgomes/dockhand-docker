@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB_NAME}
     volumes:
-      - dbdata:/var/lib/postgresql/data
+      - ${DOCKHAND_DBDATA_FOLDER:-./dbdata}:/var/lib/postgresql/data
     restart: always
     networks:
       local:
@@ -18,19 +18,14 @@ services:
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB_NAME}
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./data:/app/data
+      - ${DOCKHAND_DATA_FOLDER:-./data}:/app/data
     depends_on:
       - postgres
     restart: unless-stopped
     ports:
-      - 3000:3000
+      - ${DOCKHAND_PORT:-3000}:3000
     networks:
       local:
-
-volumes:
-  dbdata:
-    name: dockhand-dbdata
 
 networks:
   local:
