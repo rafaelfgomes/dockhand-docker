@@ -1,13 +1,13 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:17.9-alpine
     container_name: dockhand-postgres
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_USER: admin
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB_NAME}
+      POSTGRES_DB: dockhand
     volumes:
-      - ${DOCKHAND_DBDATA_FOLDER:-./dbdata}:/var/lib/postgresql/data
+      - ./data/dockhand/db:/var/lib/postgresql/data
     restart: always
     networks:
       local:
@@ -16,14 +16,14 @@ services:
     image: fnsys/dockhand
     container_name: dockhand-app
     environment:
-      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB_NAME}
+      DATABASE_URL: postgres://admin:${POSTGRES_PASSWORD}@postgres:5432/dockhand
     volumes:
-      - ${DOCKHAND_DATA_FOLDER:-./data}:/app/data
+      - ./data/dockhand:/app/data
     depends_on:
       - postgres
     restart: unless-stopped
     ports:
-      - ${DOCKHAND_PORT:-3000}:3000
+      - '3000:3000'
     networks:
       local:
 
