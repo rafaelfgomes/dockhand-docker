@@ -7,26 +7,27 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: dockhand
     volumes:
-      - ./data/dockhand/db:/var/lib/postgresql/data
+      - ${DOCKHAND_POSTGRES_DATA_FOLDER:-./data/dockhand/db}:/var/lib/postgresql/data
     restart: always
     networks:
-      local:
+      external:
+        ipv4_address: ${POSTGRES_IP}
 
   dockhand:
     image: fnsys/dockhand
     container_name: dockhand-app
     environment:
-      DATABASE_URL: postgres://admin:${POSTGRES_PASSWORD}@postgres:5432/dockhand
+      DATABASE_URL: postgres://admin:${POSTGRES_PASSWORD}@${POSTGRES_IP}:5432/dockhand
     volumes:
-      - ./data/dockhand:/app/data
+      - ${DOCKHAND_DATA_FOLDER:-./data/dockhand}:/app/data
     depends_on:
       - postgres
     restart: unless-stopped
-    ports:
-      - '3000:3000'
     networks:
-      local:
+      external:
+        ipv4_address: ${DOCKHAND_IP}
 
 networks:
-  local:
-    name: dockhand-local-network
+  external:
+    external: true
+    name: ${EXTERNAL_NETWORK_NAME}
