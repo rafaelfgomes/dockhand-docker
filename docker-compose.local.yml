@@ -1,0 +1,20 @@
+services:
+  dockhand:
+    image: fnsys/dockhand
+    container_name: dockhand
+    hostname: dockhand
+    volumes:
+      - ${DOCKHAND_DATA_FOLDER:-./data/dockhand}:/app/data
+    restart: unless-stopped
+    ports:
+      - ${DOCKHAND_PORT:-3000}:3000
+    networks:
+      local:
+        ipv4_address: 172.${SUBNET_NUMBER:-20}.0.2
+
+networks:
+  local:
+    name: dockhand-local-network
+    ipam:
+      config:
+        - subnet: 172.${SUBNET_NUMBER:-20}.0.0/16
